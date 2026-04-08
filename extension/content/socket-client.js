@@ -9,6 +9,8 @@
  */
 
 (function () {
+  // Change this to your EC2 public IP or domain when self-hosting
+  // e.g. 'http://12.34.56.78:3000' or 'https://stickers.yourdomain.com'
   const BACKEND_URL = 'http://localhost:3000';
 
   let socket = null;
