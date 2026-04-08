@@ -25,6 +25,7 @@
   display: none;            /* toggled in JS */
   flex-direction: column;
   width: 340px;
+  max-width: calc(100vw - 16px);
   max-height: 440px;
   background: #1e1e2e;
   border: 1px solid rgba(255,255,255,0.1);

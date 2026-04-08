@@ -340,10 +340,33 @@
       return;
     }
 
-    // Position the panel above the anchor button
+    // Position the panel above the anchor button, clamped to viewport
     const rect = anchorEl.getBoundingClientRect();
-    panel.style.bottom = `${window.innerHeight - rect.top + 8}px`;
-    panel.style.left = `${rect.left}px`;
+    const panelWidth = 340;
+    const panelHeight = 440;
+    const margin = 8;
+
+    // Horizontal: align to button left, but clamp so it doesn't overflow right or left edge
+    let left = rect.left;
+    if (left + panelWidth > window.innerWidth - margin) {
+      left = window.innerWidth - panelWidth - margin;
+    }
+    if (left < margin) left = margin;
+
+    // Vertical: above the button, but clamp so it doesn't overflow top of viewport
+    let bottom = window.innerHeight - rect.top + margin;
+    if (window.innerHeight - bottom < margin) {
+      bottom = window.innerHeight - panelHeight - margin;
+      // if still not fitting, flip below the button
+      if (bottom < margin) bottom = window.innerHeight - rect.bottom - margin;
+    }
+
+    // Also shrink height if viewport is too short
+    const maxHeight = rect.top - margin * 2;
+    panel.style.maxHeight = `${Math.max(200, maxHeight)}px`;
+
+    panel.style.bottom = `${bottom}px`;
+    panel.style.left = `${left}px`;
     panel.style.display = 'flex';
 
     loadStorageData().then(() => {

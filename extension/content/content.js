@@ -27,16 +27,24 @@
   // ── Display name ───────────────────────────────────────────────────────────
 
   function getDisplayName() {
-    const selectors = [
-      '[data-self-name]',
-      'div[jscontroller] [data-display-name]',
+    const candidates = [
+      // Most reliable in current Meet: self-tile "More options for <name>" button
+      () => {
+        const el = document.querySelector('[aria-label^="More options for"]');
+        if (el) return el.getAttribute('aria-label').replace('More options for ', '').trim();
+        return null;
+      },
+      // Fallback: data-self-name attribute
+      () => document.querySelector('[data-self-name]')?.getAttribute('data-self-name'),
+      // Fallback: data-display-name attribute
+      () => document.querySelector('[data-display-name]')?.getAttribute('data-display-name'),
     ];
-    for (const sel of selectors) {
-      const el = document.querySelector(sel);
-      if (el) {
-        const name = el.getAttribute('data-self-name') || el.getAttribute('data-display-name') || el.textContent;
-        if (name && name.trim()) return name.trim();
-      }
+
+    for (const fn of candidates) {
+      try {
+        const name = fn();
+        if (name && name.trim() && name.trim() !== 'You') return name.trim();
+      } catch (_) {}
     }
     return 'Someone';
   }
@@ -146,6 +154,15 @@
       window.StickerSocket.connect(meetingId, window.MeetStickerMeta.displayName);
       window.StickerSocket.onSticker(handleIncomingSticker);
       socketConnected = true;
+    }
+
+    // Keep trying to resolve the real display name until we get one
+    if (!window.MeetStickerMeta || window.MeetStickerMeta.displayName === 'Someone') {
+      const name = getDisplayName();
+      if (name !== 'Someone') {
+        window.MeetStickerMeta = { displayName: name };
+        console.log('[MeetStickers] Display name resolved:', name);
+      }
     }
 
     // Re-inject button whenever Meet wipes it
