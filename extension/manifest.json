@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "Meet Stickers",
+  "version": "1.0.0",
+  "description": "Send flying custom stickers and emoji reactions in Google Meet.",
+
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+
+  "host_permissions": [
+    "https://meet.google.com/*"
+  ],
+
+  "background": {
+    "service_worker": "background/service-worker.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["https://meet.google.com/*"],
+      "js": [
+        "assets/socket.io.min.js",
+        "assets/jszip.min.js",
+        "content/socket-client.js",
+        "content/overlay.js",
+        "content/picker.js",
+        "content/content.js"
+      ],
+      "css": [
+        "styles/picker.css",
+        "styles/overlay.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+
+  "options_page": "options/options.html",
+
+  "icons": {
+    "16":  "assets/icons/icon16.png",
+    "48":  "assets/icons/icon48.png",
+    "128": "assets/icons/icon128.png"
+  },
+
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/sticker-packs/*", "assets/jszip.min.js", "assets/socket.io.min.js"],
+      "matches": ["https://meet.google.com/*"]
+    }
+  ]
+}

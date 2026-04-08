@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meet Stickers — Options</title>
+  <link rel="stylesheet" href="options.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🐱 Meet Stickers</h1>
+      <p class="subtitle">Extension settings</p>
+    </header>
+
+    <!-- Import password -->
+    <section class="card">
+      <h2>Import Password</h2>
+      <p>This password is required to import custom sticker packs inside the picker. Set it once and share it only with trusted users.</p>
+      <div class="field-row">
+        <input id="pw-input" type="password" placeholder="Set a new import password" autocomplete="new-password" />
+        <button id="pw-save-btn">Save</button>
+      </div>
+      <p id="pw-status" class="status" aria-live="polite"></p>
+    </section>
+
+    <!-- Manage custom packs -->
+    <section class="card">
+      <h2>Custom Sticker Packs</h2>
+      <p>Packs imported via the in-call picker appear here. You can delete individual packs to free up storage.</p>
+      <div id="packs-list">
+        <p class="muted">No custom packs installed yet.</p>
+      </div>
+    </section>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -1,0 +1,273 @@
+/* picker.css — Sticker picker panel */
+
+/* ── Trigger button ─────────────────────────────────────────────────────── */
+#ms-sticker-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  margin: 0 4px;
+  transition: background 0.15s;
+}
+
+#ms-sticker-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* ── Picker panel ───────────────────────────────────────────────────────── */
+#ms-picker-panel {
+  position: fixed;
+  display: none;            /* toggled in JS */
+  flex-direction: column;
+  width: 340px;
+  max-height: 440px;
+  background: #1e1e2e;
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+  z-index: 99998;
+  overflow: hidden;
+  font-family: 'Google Sans', Roboto, sans-serif;
+  color: #e0e0e0;
+  user-select: none;
+}
+
+/* ── Tab bar ────────────────────────────────────────────────────────────── */
+#ms-tab-bar {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  padding: 4px 8px 0;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.ms-tab {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #aaa;
+  font-size: 22px;
+  padding: 8px 0;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.ms-tab.active {
+  color: #fff;
+  border-bottom-color: #7c6be8;
+}
+
+.ms-tab:hover:not(.active) {
+  color: #ddd;
+}
+
+/* ── Tab content areas ──────────────────────────────────────────────────── */
+.ms-tab-content {
+  overflow-y: auto;
+  flex: 1;
+  padding: 8px;
+}
+
+.ms-tab-content::-webkit-scrollbar { width: 4px; }
+.ms-tab-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+/* ── Emoji tab ──────────────────────────────────────────────────────────── */
+.ms-cat-label {
+  font-size: 11px;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 8px 0 4px;
+  padding-left: 2px;
+}
+
+.ms-emoji-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 2px;
+  margin-bottom: 4px;
+}
+
+.ms-emoji-btn {
+  background: transparent;
+  border: none;
+  font-size: 22px;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  line-height: 1;
+  transition: background 0.1s, transform 0.1s;
+}
+
+.ms-emoji-btn:hover {
+  background: rgba(255,255,255,0.1);
+  transform: scale(1.2);
+}
+
+/* ── Sticker packs tab ──────────────────────────────────────────────────── */
+#ms-pack-scroller {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 4px 0 8px;
+  flex-shrink: 0;
+}
+
+#ms-pack-scroller::-webkit-scrollbar { height: 3px; }
+#ms-pack-scroller::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+
+.ms-pack-btn {
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid transparent;
+  color: #ccc;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.ms-pack-btn:hover,
+.ms-pack-btn.active {
+  background: rgba(124, 107, 232, 0.3);
+  border-color: #7c6be8;
+  color: #fff;
+}
+
+#ms-sticker-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.ms-sticker-btn {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid transparent;
+  border-radius: 10px;
+  padding: 4px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s, border-color 0.15s;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ms-sticker-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+.ms-sticker-btn:hover {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(124, 107, 232, 0.5);
+  transform: scale(1.05);
+}
+
+#ms-import-btn {
+  display: block;
+  width: calc(100% - 16px);
+  margin: 8px;
+  background: rgba(255,255,255,0.05);
+  border: 1px dashed rgba(255,255,255,0.2);
+  color: #aaa;
+  border-radius: 10px;
+  padding: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.15s, color 0.15s;
+}
+
+#ms-import-btn:hover {
+  background: rgba(124, 107, 232, 0.2);
+  color: #fff;
+}
+
+.ms-empty {
+  color: #666;
+  font-size: 12px;
+  text-align: center;
+  padding: 16px 8px;
+}
+
+/* ── Import password modal ──────────────────────────────────────────────── */
+#ms-import-modal {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  z-index: 1;
+}
+
+#ms-import-modal-inner {
+  background: #2a2a3e;
+  border-radius: 12px;
+  padding: 20px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#ms-import-modal-inner p {
+  margin: 0;
+  font-size: 14px;
+  color: #ccc;
+}
+
+#ms-import-pw {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 8px;
+  color: #fff;
+  padding: 8px 10px;
+  font-size: 14px;
+  outline: none;
+}
+
+#ms-import-pw:focus {
+  border-color: #7c6be8;
+}
+
+#ms-import-actions {
+  display: flex;
+  gap: 8px;
+}
+
+#ms-import-actions button {
+  flex: 1;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+#ms-import-confirm {
+  background: #7c6be8;
+  color: #fff;
+}
+
+#ms-import-confirm:hover { background: #6a5bd6; }
+
+#ms-import-cancel {
+  background: rgba(255,255,255,0.08);
+  color: #ccc;
+}
+
+#ms-import-cancel:hover { background: rgba(255,255,255,0.15); }
