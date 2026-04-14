@@ -22,27 +22,20 @@
   const BUNDLED_PACKS = [
     { id: 'animals',   label: '🐾 Animals',   files: ['panda.png'] },
     { id: 'reactions', label: '🙌 Reactions',  files: [] },
-    { id: 'memes',     label: '😂 Memes',      files: [] },
+    { id: 'memes',     label: '😂 Memes',      files: ['dancing_parrot.gif'] },
   ];
 
   let panel = null;
   let activeTab = 'emoji';        // 'emoji' | 'packs'
   let activePackId = null;
   let customPacks = [];           // loaded from chrome.storage.local
-  let importPasswordHash = null;  // SHA-256 of the import password
 
   // ── Helpers ───────────────────────────────────────────────────────────────
 
-  async function sha256(text) {
-    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
   async function loadStorageData() {
     return new Promise((resolve) => {
-      chrome.storage.local.get(['customPacks', 'importPasswordHash'], (data) => {
+      chrome.storage.local.get(['customPacks'], (data) => {
         customPacks = data.customPacks || [];
-        importPasswordHash = data.importPasswordHash || null;
         resolve();
       });
     });
@@ -81,17 +74,6 @@
         <div id="ms-pack-scroller"></div>
         <div id="ms-sticker-grid"></div>
         <button id="ms-import-btn" title="Import a custom sticker pack (.zip)">＋ Import Pack</button>
-      </div>
-      <div id="ms-import-modal" style="display:none">
-        <div id="ms-import-modal-inner">
-          <p>Enter import password</p>
-          <input id="ms-import-pw" type="password" placeholder="Password" autocomplete="off" />
-          <div id="ms-import-actions">
-            <button id="ms-import-confirm">Confirm</button>
-            <button id="ms-import-cancel">Cancel</button>
-          </div>
-          <p id="ms-import-error" style="display:none;color:#f66">Wrong password</p>
-        </div>
       </div>
     `;
 
@@ -209,40 +191,7 @@
     }
   }
 
-  // ── Import flow (password-gated) ───────────────────────────────────────────
-
-  function openImportModal() {
-    panel.querySelector('#ms-import-modal').style.display = 'flex';
-    panel.querySelector('#ms-import-pw').value = '';
-    panel.querySelector('#ms-import-error').style.display = 'none';
-    panel.querySelector('#ms-import-pw').focus();
-  }
-
-  function closeImportModal() {
-    panel.querySelector('#ms-import-modal').style.display = 'none';
-  }
-
-  async function confirmImportPassword() {
-    const pw = panel.querySelector('#ms-import-pw').value;
-    const hash = await sha256(pw);
-
-    if (!importPasswordHash) {
-      // No password set yet — direct to options page to set one
-      panel.querySelector('#ms-import-error').textContent = 'Set an import password in the extension Options first.';
-      panel.querySelector('#ms-import-error').style.display = 'block';
-      return;
-    }
-
-    if (hash !== importPasswordHash) {
-      panel.querySelector('#ms-import-error').style.display = 'block';
-      panel.querySelector('#ms-import-pw').value = '';
-      panel.querySelector('#ms-import-pw').focus();
-      return;
-    }
-
-    closeImportModal();
-    openFilePicker();
-  }
+  // ── Import flow ────────────────────────────────────────────────────────────
 
   function openFilePicker() {
     const input = document.createElement('input');
@@ -383,12 +332,7 @@
       btn.addEventListener('click', () => switchTab(btn.dataset.tab));
     });
 
-    el.querySelector('#ms-import-btn').addEventListener('click', openImportModal);
-    el.querySelector('#ms-import-cancel').addEventListener('click', closeImportModal);
-    el.querySelector('#ms-import-confirm').addEventListener('click', confirmImportPassword);
-    el.querySelector('#ms-import-pw').addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') confirmImportPassword();
-    });
+    el.querySelector('#ms-import-btn').addEventListener('click', openFilePicker);
 
     // Close panel when clicking outside
     document.addEventListener('mousedown', (e) => {

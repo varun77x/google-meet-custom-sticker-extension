@@ -1,29 +1,5 @@
 'use strict';
 
-async function sha256(text) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-  return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-// ── Password section ──────────────────────────────────────────────────────────
-
-const pwInput = document.getElementById('pw-input');
-const pwSaveBtn = document.getElementById('pw-save-btn');
-const pwStatus = document.getElementById('pw-status');
-
-pwSaveBtn.addEventListener('click', async () => {
-  const pw = pwInput.value.trim();
-  if (!pw) {
-    showStatus(pwStatus, 'Password cannot be empty.', 'error');
-    return;
-  }
-  const hash = await sha256(pw);
-  chrome.storage.local.set({ importPasswordHash: hash }, () => {
-    pwInput.value = '';
-    showStatus(pwStatus, 'Password saved!', 'ok');
-  });
-});
-
 // ── Packs section ─────────────────────────────────────────────────────────────
 
 const packsList = document.getElementById('packs-list');
